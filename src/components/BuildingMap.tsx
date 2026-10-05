@@ -69,13 +69,6 @@ export const BuildingMap: React.FC<BuildingMapProps> = ({
       if (node.type === 'exit') {
         onToggleExit(node.id);
       }
-    } else {
-      // Default fallback: if exit clicked, toggle exit; if room/junction, set start
-      if (node.type === 'exit') {
-        onToggleExit(node.id);
-      } else {
-        onSelectStart(node.id);
-      }
     }
   };
 
@@ -122,8 +115,10 @@ export const BuildingMap: React.FC<BuildingMapProps> = ({
             return (
               <g
                 key={edge.id}
-                className="cursor-pointer group transition-all"
-                onClick={() => onToggleEdge(edge.id)}
+                className={`group transition-all ${toolMode === 'edge' ? 'cursor-pointer' : ''}`}
+                onClick={() => {
+                  if (toolMode === 'edge') onToggleEdge(edge.id);
+                }}
               >
                 {/* Invisible wide hit area for easy clicking */}
                 <line

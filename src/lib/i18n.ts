@@ -11,6 +11,9 @@ export const translations = {
     exportPngButton: 'Export Map (PNG)',
     languageSwitch: 'বাংলা',
     langName: 'English',
+    highContrast: 'High Contrast',
+    on: 'ON',
+    off: 'OFF',
     
     // Tools / Mode
     interactionMode: 'Interaction Tool',
@@ -68,6 +71,7 @@ export const translations = {
     scenarioCloseExits: '3. Close Exits E1 & E2 (No route)',
     scenarioStartR2: '4. Start Room R2 (cost 7)',
     scenarioBlockStart: '5. Block Start Node R1 (Starting location blocked)',
+    scenarioUnavailableHint: 'These checks use the official sample IDs. Load the official sample to run unavailable ones.',
 
     // Accessibility / Help
     shortcutsHint: 'Tip: Click directly on map elements to interact according to selected tool.',
@@ -82,6 +86,9 @@ export const translations = {
     exportPngButton: 'ম্যাপ ডাউনলোড (PNG)',
     languageSwitch: 'English',
     langName: 'বাংলা',
+    highContrast: 'হাই কনট্রাস্ট',
+    on: 'চালু',
+    off: 'বন্ধ',
 
     // Tools / Mode
     interactionMode: 'ইন্টারেকশন টুল',
@@ -139,6 +146,7 @@ export const translations = {
     scenarioCloseExits: '৩. প্রস্থান E1 ও E2 বন্ধ (রুট নেই)',
     scenarioStartR2: '৪. রুম R2 থেকে শুরু (ব্যয় ৭)',
     scenarioBlockStart: '৫. শুরুর নোড R1 ব্লক (শুরু অবরুদ্ধ)',
+    scenarioUnavailableHint: 'এই পরীক্ষাগুলো অফিসিয়াল নমুনার আইডি ব্যবহার করে। অনুপলব্ধগুলো চালাতে অফিসিয়াল নমুনা লোড করুন।',
 
     // Accessibility / Help
     shortcutsHint: 'পরামর্শ: নির্বাচিত টুল অনুযায়ী পরিবর্তন করতে সরাসরি ম্যাপে ক্লিক করুন।',

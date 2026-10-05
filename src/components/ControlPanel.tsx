@@ -45,6 +45,21 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   const t = translations[language];
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Section 4.1 checks reference the official sample's IDs; disable them for datasets that lack those nodes.
+  const nodeTypes = new Map(data.nodes.map((n) => [n.id, n.type]));
+  const isStartable = (id: string) => nodeTypes.get(id) === 'room' || nodeTypes.get(id) === 'junction';
+  const isExit = (id: string) => nodeTypes.get(id) === 'exit';
+  const scenarioAvailable: Record<number, boolean> = {
+    1: isStartable('R1'),
+    2: isStartable('R1') && isStartable('C2'),
+    3: isStartable('R1') && isExit('E1') && isExit('E2'),
+    4: isStartable('R2'),
+    5: isStartable('R1'),
+  };
+  const anyScenarioUnavailable = Object.values(scenarioAvailable).some((ok) => !ok);
+  const scenarioButtonClass =
+    'text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/70 disabled:hover:border-slate-700/80';
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -184,37 +199,26 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           {t.presetScenarios}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          <button
-            onClick={() => onApplyScenario(1)}
-            className="text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600"
-          >
-            {t.scenarioBaseline}
-          </button>
-          <button
-            onClick={() => onApplyScenario(2)}
-            className="text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600"
-          >
-            {t.scenarioBlockC2}
-          </button>
-          <button
-            onClick={() => onApplyScenario(3)}
-            className="text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600"
-          >
-            {t.scenarioCloseExits}
-          </button>
-          <button
-            onClick={() => onApplyScenario(4)}
-            className="text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600"
-          >
-            {t.scenarioStartR2}
-          </button>
-          <button
-            onClick={() => onApplyScenario(5)}
-            className="text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600"
-          >
-            {t.scenarioBlockStart}
-          </button>
+          {[
+            t.scenarioBaseline,
+            t.scenarioBlockC2,
+            t.scenarioCloseExits,
+            t.scenarioStartR2,
+            t.scenarioBlockStart,
+          ].map((label, i) => (
+            <button
+              key={i + 1}
+              onClick={() => onApplyScenario(i + 1)}
+              disabled={!scenarioAvailable[i + 1]}
+              className={scenarioButtonClass}
+            >
+              {label}
+            </button>
+          ))}
         </div>
+        {anyScenarioUnavailable && (
+          <p className="mt-3 text-xs text-slate-400 italic">{t.scenarioUnavailableHint}</p>
+        )}
       </div>
     </div>
   );

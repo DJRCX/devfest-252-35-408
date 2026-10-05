@@ -18,7 +18,7 @@ export default function SmartEscapeApp() {
   const [toolMode, setToolMode] = useState<'start' | 'node' | 'edge' | 'exit'>('start');
   const [startNodeId, setStartNodeId] = useState<string | null>('R1');
   const [highContrast, setHighContrast] = useState<boolean>(false);
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<{ en: string; bn: string } | null>(null);
 
   // Initialize simulation state from data.initial_state
   const [simulationState, setSimulationState] = useState<SimulationState>(() => ({
@@ -119,7 +119,10 @@ export default function SmartEscapeApp() {
         const result = validateBuildingData(parsed);
 
         if (!result.valid || !result.data) {
-          setValidationError(result.error || 'Unknown validation error.');
+          setValidationError({
+            en: result.error || 'Unknown validation error.',
+            bn: result.errorBn || 'অজানা বৈধতা ত্রুটি।',
+          });
           return;
         }
 
@@ -139,7 +142,10 @@ export default function SmartEscapeApp() {
         );
         setStartNodeId(firstStartable ? firstStartable.id : null);
       } catch (err: any) {
-        setValidationError(`Invalid JSON format: ${err.message}`);
+        setValidationError({
+          en: `Invalid JSON format: ${err.message}`,
+          bn: `অবৈধ JSON ফরম্যাট: ${err.message}`,
+        });
       }
     };
     reader.readAsText(file);
@@ -174,10 +180,10 @@ export default function SmartEscapeApp() {
     } else if (scenarioIndex === 5) {
       // Blocked start: Select R1; then block R1
       setStartNodeId('R1');
-      setSimulationState((prev) => {
-        const nextBlocked = new Set(prev.blockedNodes);
-        nextBlocked.add('R1');
-        return { ...prev, blockedNodes: nextBlocked };
+      setSimulationState({
+        blockedNodes: new Set([...data.initial_state.blocked_nodes, 'R1']),
+        blockedEdges: new Set(data.initial_state.blocked_edges),
+        closedExits: new Set(data.initial_state.closed_exits),
       });
     }
   }, [data.initial_state, handleReset]);
@@ -246,7 +252,7 @@ export default function SmartEscapeApp() {
                   : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
               }`}
             >
-              High Contrast: {highContrast ? 'ON' : 'OFF'}
+              {`${t.highContrast}: ${highContrast ? t.on : t.off}`}
             </button>
           </div>
         </header>
@@ -258,7 +264,7 @@ export default function SmartEscapeApp() {
               <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0 mt-0.5" />
               <div>
                 <h4 className="font-semibold text-sm">{t.validationError}</h4>
-                <p className="text-xs text-rose-300/90 mt-1 font-mono">{validationError}</p>
+                <p className="text-xs text-rose-300/90 mt-1 font-mono">{validationError[language]}</p>
               </div>
             </div>
             <button
