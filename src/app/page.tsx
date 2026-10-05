@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import sampleBuilding from '../../building.json';
 import { BuildingData, SimulationState, Language, RouteResult } from '../lib/types';
 import { validateBuildingData } from '../lib/validator';
@@ -10,7 +10,7 @@ import { BuildingMap } from '../components/BuildingMap';
 import { ControlPanel } from '../components/ControlPanel';
 import { RouteResultCard } from '../components/RouteResultCard';
 import { LegendCard } from '../components/LegendCard';
-import { ShieldCheck, AlertTriangle, Sparkles, X } from 'lucide-react';
+import { AlertTriangle, X, Shield, Sparkles } from 'lucide-react';
 
 export default function SmartEscapeApp() {
   const [data, setData] = useState<BuildingData>(sampleBuilding as BuildingData);
@@ -211,7 +211,7 @@ export default function SmartEscapeApp() {
       canvas.width = 1200;
       canvas.height = 800;
       if (ctx) {
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = '#f8fafc';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         const pngUrl = canvas.toDataURL('image/png');
@@ -226,30 +226,53 @@ export default function SmartEscapeApp() {
   }, [data.building]);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
+    <main className="min-h-[100dvh] bg-slate-50 text-slate-900 p-4 sm:p-6 lg:p-8 selection:bg-emerald-600 selection:text-white">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <header className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
+        {/* Command Center Header */}
+        <header className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-200">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700 text-[10px] font-mono font-bold uppercase tracking-wider">
                 {t.officialBadge}
               </span>
-              <span className="text-xs text-slate-400 font-mono">Reg: 252-35-408</span>
+              <span className="text-[11px] text-slate-500 font-mono font-medium">Reg: 252-35-408</span>
+              
+              {/* Telemetry Status Beacon */}
+              {routeResult.status === 'SUCCESS' && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-[10px] font-mono font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  OPT: {routeResult.exitId} • COST {routeResult.totalCost}
+                </span>
+              )}
+              {routeResult.status === 'START_BLOCKED' && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-300 text-rose-800 text-[10px] font-mono font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                  START BLOCKED
+                </span>
+              )}
+              {routeResult.status === 'NO_ROUTE' && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800 text-[10px] font-mono font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                  NO ROUTE
+                </span>
+              )}
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mt-1">
+
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
               {t.appTitle}
             </h1>
-            <p className="text-sm text-slate-400 mt-0.5">{t.appSubtitle}</p>
+            <p className="text-xs md:text-sm text-slate-600 font-normal">
+              {t.appSubtitle}
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => setHighContrast(!highContrast)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all active:scale-[0.98] ${
                 highContrast
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500'
-                  : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                  ? 'bg-amber-100 text-amber-900 border-amber-400 shadow-sm'
+                  : 'bg-white text-slate-700 border-slate-200 hover:text-slate-900 hover:bg-slate-50 shadow-sm'
               }`}
             >
               {`${t.highContrast}: ${highContrast ? t.on : t.off}`}
@@ -257,28 +280,28 @@ export default function SmartEscapeApp() {
           </div>
         </header>
 
-        {/* Validation Error Banner */}
+        {/* Validation Error Banner (Bilingual) */}
         {validationError && (
-          <div className="bg-rose-950/50 border border-rose-500/60 rounded-2xl p-4 flex items-start justify-between gap-3 text-rose-200">
+          <div className="bg-rose-50 border border-rose-300 rounded-2xl p-4 flex items-start justify-between gap-3 text-rose-900 shadow-sm">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-sm">{t.validationError}</h4>
-                <p className="text-xs text-rose-300/90 mt-1 font-mono">{validationError[language]}</p>
+                <h4 className="font-bold text-sm tracking-tight text-rose-950">{t.validationError}</h4>
+                <p className="text-xs text-rose-800 mt-1 font-mono">{validationError[language]}</p>
               </div>
             </div>
             <button
               onClick={() => setValidationError(null)}
-              className="text-rose-400 hover:text-white p-1 rounded-lg transition"
+              className="text-rose-500 hover:text-rose-800 p-1.5 rounded-xl hover:bg-rose-100 transition active:scale-95"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
         )}
 
-        {/* Main Grid Layout */}
+        {/* Main Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left / Center: Interactive Map and Result */}
+          {/* Left: Interactive Map and Live Route Card */}
           <div className="lg:col-span-8 space-y-6">
             <BuildingMap
               data={data}
@@ -301,7 +324,7 @@ export default function SmartEscapeApp() {
             />
           </div>
 
-          {/* Right: Controls & Info */}
+          {/* Right: Controls & Telemetry Info */}
           <div className="lg:col-span-4 space-y-6">
             <ControlPanel
               language={language}
@@ -324,12 +347,13 @@ export default function SmartEscapeApp() {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="pt-6 border-t border-slate-800 text-center text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            AI DevFest Mock Test • Smart Escape Evacuation Simulator
+        {/* Command Center Footer */}
+        <footer className="pt-6 border-t border-slate-200 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-slate-400" />
+            <span>AI DevFest Mock Test • Smart Escape Simulator</span>
           </div>
-          <div>
+          <div className="font-mono text-[11px]">
             Participant: Mahtabul Al Nahian • Reg: 252-35-408 • MIT License
           </div>
         </footer>

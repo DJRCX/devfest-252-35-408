@@ -57,8 +57,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     5: isStartable('R1'),
   };
   const anyScenarioUnavailable = Object.values(scenarioAvailable).some((ok) => !ok);
+
   const scenarioButtonClass =
-    'text-left px-3 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-medium text-slate-200 transition hover:border-slate-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/70 disabled:hover:border-slate-700/80';
+    'text-left px-3.5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-700 transition-all duration-150 hover:border-slate-300 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-50 disabled:hover:border-slate-200 shadow-xs';
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -69,16 +70,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Action Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex items-center gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs md:text-sm font-medium rounded-xl transition shadow-lg shadow-indigo-600/20"
+              className="flex items-center gap-2 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white text-xs font-semibold rounded-xl transition shadow-sm"
             >
-              <Upload className="w-4 h-4" />
+              <Upload className="w-3.5 h-3.5" />
               {t.importButton}
             </button>
             <input
@@ -91,17 +92,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
             <button
               onClick={onLoadSample}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 text-xs md:text-sm font-medium rounded-xl border border-slate-700 transition"
+              className="flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition shadow-xs"
             >
-              <FileText className="w-4 h-4 text-emerald-400" />
+              <FileText className="w-3.5 h-3.5 text-emerald-600" />
               {t.loadSampleButton}
             </button>
 
             <button
               onClick={onReset}
-              className="flex items-center gap-2 px-3 py-2 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 text-xs md:text-sm font-medium rounded-xl border border-amber-500/40 transition active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold rounded-xl border border-amber-200 transition active:scale-[0.98]"
             >
-              <RotateCcw className="w-4 h-4 text-amber-400" />
+              <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
               {t.resetButton}
             </button>
           </div>
@@ -109,18 +110,18 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onExportPng}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs md:text-sm font-medium rounded-xl border border-slate-700 transition"
+              className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition active:scale-[0.98] shadow-xs"
               title={t.exportPngButton}
             >
-              <Download className="w-4 h-4 text-sky-400" />
+              <Download className="w-3.5 h-3.5 text-sky-600" />
               <span className="hidden sm:inline">{t.exportPngButton}</span>
             </button>
 
             <button
               onClick={onToggleLanguage}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs md:text-sm font-medium rounded-xl border border-slate-700 transition"
+              className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition active:scale-[0.98] shadow-xs"
             >
-              <Languages className="w-4 h-4 text-violet-400" />
+              <Languages className="w-3.5 h-3.5 text-violet-600" />
               <span>{t.languageSwitch}</span>
             </button>
           </div>
@@ -128,63 +129,63 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </div>
 
       {/* Interactive Tool Selector */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-          <SlidersHorizontal className="w-4 h-4 text-sky-400" />
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-sky-600" />
           {t.interactionMode}
         </h3>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <button
             onClick={() => onSetToolMode('start')}
-            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition text-center ${
+            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all text-center active:scale-[0.98] ${
               toolMode === 'start'
-                ? 'bg-sky-500/20 border-sky-500 text-sky-200 shadow-md shadow-sky-500/10'
-                : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-sky-50 border-sky-400 text-sky-900 shadow-xs font-bold'
+                : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <Navigation className="w-5 h-5 mb-1.5 text-sky-400" />
-            <span className="text-xs font-semibold">{t.modeSelectStart}</span>
+            <Navigation className="w-5 h-5 mb-1.5 text-sky-600" />
+            <span className="text-xs font-bold">{t.modeSelectStart}</span>
           </button>
 
           <button
             onClick={() => onSetToolMode('node')}
-            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition text-center ${
+            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all text-center active:scale-[0.98] ${
               toolMode === 'node'
-                ? 'bg-rose-500/20 border-rose-500 text-rose-200 shadow-md shadow-rose-500/10'
-                : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-rose-50 border-rose-400 text-rose-900 shadow-xs font-bold'
+                : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <ShieldAlert className="w-5 h-5 mb-1.5 text-rose-400" />
-            <span className="text-xs font-semibold">{t.modeToggleNode}</span>
+            <ShieldAlert className="w-5 h-5 mb-1.5 text-rose-600" />
+            <span className="text-xs font-bold">{t.modeToggleNode}</span>
           </button>
 
           <button
             onClick={() => onSetToolMode('edge')}
-            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition text-center ${
+            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all text-center active:scale-[0.98] ${
               toolMode === 'edge'
-                ? 'bg-orange-500/20 border-orange-500 text-orange-200 shadow-md shadow-orange-500/10'
-                : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-amber-50 border-amber-400 text-amber-900 shadow-xs font-bold'
+                : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <Flame className="w-5 h-5 mb-1.5 text-orange-400" />
-            <span className="text-xs font-semibold">{t.modeToggleEdge}</span>
+            <Flame className="w-5 h-5 mb-1.5 text-amber-600" />
+            <span className="text-xs font-bold">{t.modeToggleEdge}</span>
           </button>
 
           <button
             onClick={() => onSetToolMode('exit')}
-            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition text-center ${
+            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all text-center active:scale-[0.98] ${
               toolMode === 'exit'
-                ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200 shadow-md shadow-emerald-500/10'
-                : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-emerald-50 border-emerald-400 text-emerald-900 shadow-xs font-bold'
+                : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <DoorClosed className="w-5 h-5 mb-1.5 text-emerald-400" />
-            <span className="text-xs font-semibold">{t.modeToggleExit}</span>
+            <DoorClosed className="w-5 h-5 mb-1.5 text-emerald-600" />
+            <span className="text-xs font-bold">{t.modeToggleExit}</span>
           </button>
         </div>
 
-        <p className="mt-3 text-xs text-slate-400 italic">
+        <p className="mt-3 text-xs text-slate-500 font-medium">
           {toolMode === 'start' && t.modeSelectStartDesc}
           {toolMode === 'node' && t.modeToggleNodeDesc}
           {toolMode === 'edge' && t.modeToggleEdgeDesc}
@@ -192,13 +193,13 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         </p>
       </div>
 
-      {/* Preset Scenarios / Test Cases from Section 4.1 */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      {/* Preset Scenarios (Section 4.1 Mock Checks) */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
           {t.presetScenarios}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
           {[
             t.scenarioBaseline,
             t.scenarioBlockC2,
@@ -217,7 +218,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           ))}
         </div>
         {anyScenarioUnavailable && (
-          <p className="mt-3 text-xs text-slate-400 italic">{t.scenarioUnavailableHint}</p>
+          <p className="mt-3 text-xs text-slate-500 font-medium italic">{t.scenarioUnavailableHint}</p>
         )}
       </div>
     </div>
